@@ -69,10 +69,39 @@ def vehicles_view(request):
         return redirect('/login')
 
 
+def new_vehicle_view(request):
+    if request.user.is_authenticated:
+        if request.method == 'POST':
+            make = request.POST['make']
+            model = request.POST['model']
+            license_plate = request.POST['license_plate']
+            role = request.POST['role']
+
+            vehicle = Vehicle.objects.create(make=make, model=model, license_plate=license_plate, role_id=role)
+            try:
+                vehicle.save()
+                return redirect('/vehicles')
+            except Exception as e:
+                return render(request, 'fms/new-booking.html', {'error_message': e})
+
+        else:
+            roles = Role.objects.all()
+            return render(request, 'fms/new-vehicle.html', {'roles': roles})
+    else:
+        return redirect('/login')
+
+
 def bookings_view(request):
     if request.user.is_authenticated:
         bookings = Booking.objects.all()
         return render(request, 'fms/bookings.html', {'bookings': bookings})
+    else:
+        return redirect('/login')
+
+
+def new_booking_view(request):
+    if request.user.is_authenticated:
+        return render(request, 'fms/new-booking.html')
     else:
         return redirect('/login')
 
@@ -85,8 +114,22 @@ def schedule_view(request):
         return redirect('/login')
 
 
+def new_schedule_view(request):
+    if request.user.is_authenticated:
+        return render(request, 'fms/new-schedule.html')
+    else:
+        return redirect('/login')
+
+
 def vendors_view(request):
     if request.user.is_authenticated:
         return render(request, 'fms/vendors.html')
+    else:
+        return redirect('/login')
+
+
+def new_vendor_view(request):
+    if request.user.is_authenticated:
+        return render(request, 'fms/new-vendor.html')
     else:
         return redirect('/login')

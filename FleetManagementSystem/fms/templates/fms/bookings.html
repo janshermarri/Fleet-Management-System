@@ -11,6 +11,16 @@
                 <div>Bookings
                 </div>
             </div>
+            <div class="page-title-actions">
+                <button type="button" onclick="location.href='{% url 'new-booking' %}'" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                        class="btn-shadow btn btn-info">
+                                            <span class="btn-icon-wrapper pr-2 opacity-7">
+                                                <i class="fa fa-business-time fa-w-20"></i>
+                                            </span>
+                    New Booking
+                </button>
+            </div>
+
         </div>
     </div>
     <div class="row">
@@ -32,15 +42,15 @@
                             </thead>
                             <tbody>
                             {% for booking in bookings %}
-                            <tr>
-                                <td>{{ booking.from_location }}</td>
-                                <td>{{ booking.to_location }}</td>
-                                <td>{{ booking.departure_date }}</td>
-                                <td>{{ booking.purpose.name }}</td>
-                                <td>{{ booking.status.name }}</td>
-                                <td>{{ booking.description }}</td>
-                                <td></td>
-                            </tr>
+                                <tr>
+                                    <td>{{ booking.from_location }}</td>
+                                    <td>{{ booking.to_location }}</td>
+                                    <td>{{ booking.departure_date }}</td>
+                                    <td>{{ booking.purpose.name }}</td>
+                                    <td>{{ booking.status.name }}</td>
+                                    <td>{{ booking.description }}</td>
+                                    <td></td>
+                                </tr>
                             {% endfor bookings %}
                             </tbody>
                         </table>

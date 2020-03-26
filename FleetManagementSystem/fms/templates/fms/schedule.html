@@ -11,6 +11,16 @@
                 <div>Schedule
                 </div>
             </div>
+            <div class="page-title-actions">
+                <button type="button" onclick="location.href='{% url 'new-schedule' %}'" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                        class="btn-shadow btn btn-info">
+                                            <span class="btn-icon-wrapper pr-2 opacity-7">
+                                                <i class="fa fa-business-time fa-w-20"></i>
+                                            </span>
+                    New Schedule
+                </button>
+            </div>
+
         </div>
     </div>
     <div class="row">
@@ -31,14 +41,14 @@
                             </thead>
                             <tbody>
                             {% for item in schedule %}
-                            <tr>
-                                <td>{{ item.vehicle.make }} - {{ item.vehicle.model }}</td>
-                                <td>{{ item.booking.description }}</td>
-                                <td>{{ item.departure_date }}</td>
-                                <td>{{ item.arrival_date }}</td>
-                                <td>{{ item.booking.purpose.name }}</td>
-                                <td></td>
-                            </tr>
+                                <tr>
+                                    <td>{{ item.vehicle.make }} - {{ item.vehicle.model }}</td>
+                                    <td>{{ item.booking.description }}</td>
+                                    <td>{{ item.departure_date }}</td>
+                                    <td>{{ item.arrival_date }}</td>
+                                    <td>{{ item.booking.purpose.name }}</td>
+                                    <td></td>
+                                </tr>
                             {% endfor bookings %}
                             </tbody>
                         </table>
