@@ -1,0 +1,53 @@
+{% extends 'fms/base.html' %}
+
+{% block content %}
+    <div class="app-page-title">
+        <div class="page-title-wrapper">
+            <div class="page-title-heading">
+                <div class="page-title-icon">
+                    <i class="pe-7s-car icon-gradient bg-mean-fruit">
+                    </i>
+                </div>
+                <div>Bookings
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="main-card mb-3 card">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="mb-0 table">
+                            <thead>
+                            <tr>
+                                <th>From</th>
+                                <th>To</th>
+                                <th>Departure</th>
+                                <th>Purpose</th>
+                                <th>Status</th>
+                                <th>Description</th>
+                                <th>Actions</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for booking in bookings %}
+                            <tr>
+                                <td>{{ booking.from_location }}</td>
+                                <td>{{ booking.to_location }}</td>
+                                <td>{{ booking.departure_date }}</td>
+                                <td>{{ booking.purpose.name }}</td>
+                                <td>{{ booking.status.name }}</td>
+                                <td>{{ booking.description }}</td>
+                                <td></td>
+                            </tr>
+                            {% endfor bookings %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}

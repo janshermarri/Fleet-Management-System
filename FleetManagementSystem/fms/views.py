@@ -1,11 +1,16 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, logout, login
 from django.contrib.auth.models import User
+from .models import Vehicle, Booking, Schedule, Status, Role
 
 
 def index(request):
     if request.user.is_authenticated:
-        return render(request, 'fms/index.html')
+        bookings_count = Booking.objects.count()
+        vehicles_count = Vehicle.objects.count()
+        vendors_count = 2
+        count = {'bookings': bookings_count, 'vehicles': vehicles_count, 'vendors': vendors_count}
+        return render(request, 'fms/index.html', {'count': count})
     else:
         return redirect('/login')
 
@@ -55,3 +60,33 @@ def logout_user(request):
     logout(request)
     return redirect('/login/')
 
+
+def vehicles_view(request):
+    if request.user.is_authenticated:
+        vehicles = Vehicle.objects.all()
+        return render(request, 'fms/vehicles.html', {'vehicles': vehicles})
+    else:
+        return redirect('/login')
+
+
+def bookings_view(request):
+    if request.user.is_authenticated:
+        bookings = Booking.objects.all()
+        return render(request, 'fms/bookings.html', {'bookings': bookings})
+    else:
+        return redirect('/login')
+
+
+def schedule_view(request):
+    if request.user.is_authenticated:
+        schedule = Schedule.objects.all()
+        return render(request, 'fms/schedule.html', {'schedule': schedule})
+    else:
+        return redirect('/login')
+
+
+def vendors_view(request):
+    if request.user.is_authenticated:
+        return render(request, 'fms/vendors.html')
+    else:
+        return redirect('/login')
