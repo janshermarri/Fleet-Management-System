@@ -1,207 +1,241 @@
-<!doctype html>
-<html lang="en">
-
+<!DOCTYPE html>
+<html>
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta http-equiv="Content-Language" content="en">
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <title>Fleet Management System</title>
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, shrink-to-fit=no"/>
-    <meta name="description" content="This is an example dashboard created using build-in elements and components.">
-    <meta name="msapplication-tap-highlight" content="no">
+    <title>{% block page_title %}FMS{% endblock page_title %}</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     {% load static %}
-    <!--
-    =========================================================
-    * ArchitectUI HTML Theme Dashboard - v1.0.0
-    =========================================================
-    * Product Page: https://dashboardpack.com
-    * Copyright 2019 DashboardPack (https://dashboardpack.com)
-    * Licensed under MIT (https://github.com/DashboardPack/architectui-html-theme-free/blob/master/LICENSE)
-    =========================================================
-    * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-    -->
-    <link href="{% static 'css/main.css' %}" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="{% static 'plugins/fontawesome-free/css/all.min.css' %}">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <!-- Tempusdominus Bbootstrap 4 -->
+    <link rel="stylesheet"
+          href="{% static 'plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css' %}">
+    <!-- iCheck -->
+    <link rel="stylesheet" href="{% static 'plugins/icheck-bootstrap/icheck-bootstrap.min.css' %}">
+    <!-- JQVMap -->
+    <link rel="stylesheet" href="{% static 'plugins/jqvmap/jqvmap.min.css' %}">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="{% static 'dist/css/adminlte.min.css' %}">
+    <!-- overlayScrollbars -->
+    <link rel="stylesheet" href="{% static 'plugins/overlayScrollbars/css/OverlayScrollbars.min.css' %}">
+    <!-- Daterange picker -->
+    <link rel="stylesheet" href="{% static 'plugins/daterangepicker/daterangepicker.css' %}">
+    <!-- summernote -->
+    <link rel="stylesheet" href="{% static 'plugins/summernote/summernote-bs4.css' %}">
 
+    <link rel="stylesheet" href="{% static "plugins/datatables-bs4/css/dataTables.bootstrap4.css" %}">
+    <link rel="stylesheet" href="{% static "plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" %}">
+
+    <link rel="stylesheet" href="{% static 'plugins/toastr/toastr.min.css' %}">
+
+    <!-- Google Font: Source Sans Pro -->
+    <link href=" https:
+    //fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
 </head>
-<body>
-<div class="app-container app-theme-white body-tabs-shadow fixed-sidebar fixed-header">
-    <div class="app-header header-shadow">
-        <div class="app-header__logo">
-            <div><a href="{% url 'index' %}"><h4>FMS</h4></a></div>
-            <div class="header__pane ml-auto">
-                <div>
-                    <button type="button" class="hamburger close-sidebar-btn hamburger--elastic"
-                            data-class="closed-sidebar">
-                            <span class="hamburger-box">
-                                <span class="hamburger-inner"></span>
-                            </span>
-                    </button>
-                </div>
+<body class="hold-transition sidebar-mini layout-fixed">
+<div class="wrapper">
+
+    <!-- Navbar -->
+    <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+        <!-- Left navbar links -->
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+            </li>
+        </ul>
+        <!-- SEARCH FORM -->
+        <form class="form-inline ml-3">
+        </form>
+
+        <!-- Right navbar links -->
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item d-none d-sm-inline-block">
+                <button type="button" class="btn btn-block btn-info" onclick="location.href='{% url 'logout' %}'"><span class="fas fa-sign-out-alt"></span> Logout</button>
+{#                <a href="{% url 'logout' %}" class="nav-link">Logout</a>#}
+            </li>
+        </ul>
+    </nav>
+    <!-- /.navbar -->
+
+    <!-- Main Sidebar Container -->
+    <aside class="main-sidebar sidebar-dark-primary elevation-4">
+        <!-- Brand Logo -->
+        <a href="{% url 'index' %}" class="brand-link">
+            <img src="{% static "dist/img/AdminLTELogo.png" %}" alt="AdminLTE Logo"
+                 class="brand-image img-circle elevation-3" style="opacity: .8">
+            <span class="brand-text font-weight-light">FMS</span>
+        </a>
+
+        <!-- Sidebar -->
+        <div class="sidebar os-host os-theme-light os-host-overflow os-host-overflow-y os-host-resize-disabled os-host-transition os-host-scrollbar-horizontal-hidden">
+            <div class="os-resize-observer-host">
+                <div class="os-resize-observer observed" style="left: 0px; right: auto;"></div>
             </div>
-        </div>
-        <div class="app-header__mobile-menu">
-            <div>
-                <button type="button" class="hamburger hamburger--elastic mobile-toggle-nav">
-                        <span class="hamburger-box">
-                            <span class="hamburger-inner"></span>
-                        </span>
-                </button>
+            <div class="os-size-auto-observer" style="height: calc(100% + 1px); float: left;">
+                <div class="os-resize-observer observed"></div>
             </div>
-        </div>
-        <div class="app-header__menu">
-                <span>
-                    <button type="button"
-                            class="btn-icon btn-icon-only btn btn-primary btn-sm mobile-toggle-header-nav">
-                        <span class="btn-icon-wrapper">
-                            <i class="fa fa-ellipsis-v fa-w-6"></i>
-                        </span>
-                    </button>
-                </span>
-        </div>
-        <div class="app-header__content">
-            <div class="app-header-left">
-{% comment %}
-                <div class="search-wrapper">
-                    <div class="input-holder">
-                        <input type="text" class="search-input" placeholder="Type to search">
-                        <button class="search-icon"><span></span></button>
-                    </div>
-                    <button class="close"></button>
-                </div>
-{% endcomment %}
-                <ul class="header-menu nav">
-{% comment %}
-                    <li class="dropdown nav-item">
-                        <a href="javascript:void(0);" class="nav-link">
-                            <i class="nav-link-icon fa fa-cog"></i>
-                            Settings
-                        </a>
-                    </li>
-{% endcomment %}
-                </ul>
-            </div>
-            <div class="app-header-right">
-                <div class="header-btn-lg pr-0">
-                    <div class="widget-content p-0">
-                        <div class="widget-content-wrapper">
-                            <div class="widget-content-left">
-                                <div class="btn-group">
-                                    <a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
-                                       class="p-0 btn">
-                                        <img width="42" class="rounded-circle" src="{% static 'images/avatars/user.jpg' %}" alt="">
-                                        <i class="fa fa-angle-down ml-2 opacity-8"></i>
-                                    </a>
-                                    <div tabindex="-1" role="menu" aria-hidden="true"
-                                         class="dropdown-menu dropdown-menu-right">
-                                        <button type="button" tabindex="0" class="dropdown-item">My Account</button>
-                                        <div tabindex="-1" class="dropdown-divider"></div>
-                                        <button type="button" tabindex="0" class="dropdown-item"><a href="{% url 'logout' %}">Logout</a></button>
-                                    </div>
-                                </div>
+            <div class="os-content-glue" style="margin: 0px -8px; width: 249px; height: 665px;"></div>
+            <div class="os-padding">
+                <div class="os-viewport os-viewport-native-scrollbars-invisible" style="overflow-y: scroll;">
+                    <div class="os-content" style="padding: 0px 8px; height: 100%; width: 100%;">
+                        <!-- Sidebar user panel (optional) -->
+                        <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+                            <div class="image">
+                                <img src="{% static 'dist/img/user2-160x160.jpg' %}" class="img-circle elevation-2"
+                                     alt="User Image">
                             </div>
-                            <div class="widget-content-left  ml-3 header-user-info">
-                                <div class="widget-heading">
-                                    {{ user.first_name }} {{ user.last_name }}
-                                </div>
+                            <div class="info">
+                                <a href="#" class="d-block">{{ user.first_name }} {{ user.last_name }}</a>
                             </div>
                         </div>
+
+                        <!-- Sidebar Menu -->
+                        <nav class="mt-2">
+                            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
+                                data-accordion="false">
+                                <li class="nav-header">Bookings</li>
+                                <li class="nav-item">
+                                    <a href="{% url 'bookings' %}" class="nav-link">
+                                        <i class="nav-icon fa fa-list"></i>
+                                        <p>
+                                            Bookings
+                                        </p>
+                                    </a>
+                                </li>
+                            </ul>
+                            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
+                                data-accordion="false">
+                                <li class="nav-header">Schedule</li>
+                                <li class="nav-item">
+                                    <a href="{% url 'schedule' %}" class="nav-link">
+                                        <i class="nav-icon fa fa-clock"></i>
+                                        <p>
+                                            Schedule
+                                        </p>
+                                    </a>
+                                </li>
+                            </ul>
+                            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
+                                data-accordion="false">
+                                <li class="nav-header">Vehicles</li>
+                                <li class="nav-item">
+                                    <a href="{% url 'vehicles' %}" class="nav-link">
+                                        <i class="nav-icon fa fa-car"></i>
+                                        <p>
+                                            Vehicles
+                                        </p>
+                                    </a>
+                                </li>
+                            </ul>
+                            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
+                                data-accordion="false">
+                                <li class="nav-header">Vendors</li>
+                                <li class="nav-item">
+                                    <a href="{% url 'vendors' %}" class="nav-link">
+                                        <i class="nav-icon fa fa-user"></i>
+                                        <p>
+                                            Vendors
+                                        </p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+                        <!-- /.sidebar-menu -->
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-    <div class="app-main">
-        <div class="app-sidebar sidebar-shadow">
-            <div class="app-header__logo">
-                <div class="logo-src"></div>
-                <div class="header__pane ml-auto">
-                    <div>
-                        <button type="button" class="hamburger close-sidebar-btn hamburger--elastic"
-                                data-class="closed-sidebar">
-                                    <span class="hamburger-box">
-                                        <span class="hamburger-inner"></span>
-                                    </span>
-                        </button>
-                    </div>
+            <div class="os-scrollbar os-scrollbar-horizontal os-scrollbar-unusable os-scrollbar-auto-hidden">
+                <div class="os-scrollbar-track">
+                    <div class="os-scrollbar-handle" style="width: 100%; transform: translate(0px, 0px);"></div>
                 </div>
             </div>
-            <div class="app-header__mobile-menu">
-                <div>
-                    <button type="button" class="hamburger hamburger--elastic mobile-toggle-nav">
-                                <span class="hamburger-box">
-                                    <span class="hamburger-inner"></span>
-                                </span>
-                    </button>
+            <div class="os-scrollbar os-scrollbar-vertical os-scrollbar-auto-hidden">
+                <div class="os-scrollbar-track">
+                    <div class="os-scrollbar-handle" style="height: 52.8152%; transform: translate(0px, 0px);"></div>
                 </div>
             </div>
-            <div class="app-header__menu">
-                        <span>
-                            <button type="button"
-                                    class="btn-icon btn-icon-only btn btn-primary btn-sm mobile-toggle-header-nav">
-                                <span class="btn-icon-wrapper">
-                                    <i class="fa fa-ellipsis-v fa-w-6"></i>
-                                </span>
-                            </button>
-                        </span>
-            </div>
-            <div class="scrollbar-sidebar">
-                <div class="app-sidebar__inner">
-                    <ul class="vertical-nav-menu">
-                        <li class="app-sidebar__heading">Dashboard</li>
-                        <li>
-                            <a href="{% url 'index' %}" class="mm-active">
-                                <i class="metismenu-icon pe-7s-rocket"></i>
-                                Overview
-                            </a>
-                        </li>
-                        <li class="app-sidebar__heading">Bookings</li>
-                        <li>
-                            <a href="{% url 'bookings' %}">
-                                <i class="metismenu-icon pe-7s-menu"></i>
-                                Bookings
-                            </a>
-                        </li>
-                        <li class="app-sidebar__heading">Vehicles</li>
-                        <li
+            <div class="os-scrollbar-corner"></div>
+        </div>        <!-- /.sidebar -->
+    </aside>
 
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <div class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1 class="m-0 text-dark">{% block title %}Dashboard{% endblock title %}</h1>
+                    </div><!-- /.col -->
+                    <div class="col-sm-6">{% block title-right %}{% endblock title-right %}
+                    </div><!-- /.col -->
+                </div><!-- /.row -->
+            </div><!-- /.container-fluid -->
+        </div>
+        <!-- /.content-header -->
 
-                        >
-                            <a href="{% url 'vehicles' %}">
-                                <i class="metismenu-icon pe-7s-car"></i>
-                                Vehicles
-                                <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
-                            </a>
-                        </li>
-                        <li class="app-sidebar__heading">Vendors</li>
-                        <li>
-                            <a href="{% url 'vendors' %}">
-                                <i class="metismenu-icon pe-7s-users"></i>
-                                Vendors
-                            </a>
-                        </li>
-                        <li class="app-sidebar__heading">Schedule</li>
-                        <li>
-                            <a href="{% url 'schedule' %}">
-                                <i class="metismenu-icon pe-7s-clock"></i>
-                                Schedule
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-        <div class="app-main__outer">
-            <div class="app-main__inner">
-              {% block content %}
-              {% endblock content %}
-            </div>
-        </div>
-        <script src="http://maps.google.com/maps/api/js?sensor=true"></script>
+        <!-- Main content -->
+        <section class="content">
+            <div class="container-fluid">
+                {% block content %}
+                {% endblock content %}
+            </div><!-- /.container-fluid -->
+        </section>
+        <!-- /.content -->
     </div>
+    <!-- Control Sidebar -->
+    <aside class="control-sidebar control-sidebar-dark">
+        <!-- Control sidebar content goes here -->
+    </aside>
+    <!-- /.control-sidebar -->
 </div>
-<script type="text/javascript" src="{% static 'scripts/main.js' %}"></script>
+<!-- ./wrapper -->
 
+<!-- jQuery -->
+<script src="{% static 'plugins/jquery/jquery-3.4.1.min.js' %}"></script>
+<!-- jQuery UI 1.11.4 -->
+<script src="{% static 'plugins/jquery-ui/jquery-ui.min.js' %}"></script>
+<!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+<script>
+    $.widget.bridge('uibutton', $.ui.button)
+</script>
+<!-- Bootstrap 4 -->
+<script src="{% static 'plugins/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+<!-- ChartJS -->
+<script src="{% static 'plugins/chart.js/Chart.min.js' %}"></script>
+<!-- Sparkline -->
+<script src="{% static 'plugins/sparklines/sparkline.js' %}"></script>
+<!-- JQVMap -->
+{#<script src="{% static 'plugins/jqvmap/jquery.vmap.min.js' %}"></script>#}
+{#<script src="{% static 'plugins/jqvmap/maps/jquery.vmap.usa.js' %}"></script>#}
+<!-- jQuery Knob Chart -->
+<script src="{% static 'plugins/jquery-knob/jquery.knob.min.js' %}"></script>
+<!-- daterangepicker -->
+<script src="{% static 'plugins/moment/moment.min.js' %}"></script>
+<script src="{% static 'plugins/daterangepicker/daterangepicker.js' %}"></script>
+<!-- Tempusdominus Bootstrap 4 -->
+<script src="{% static 'plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js' %}"></script>
+<!-- Summernote -->
+<script src="{% static 'plugins/summernote/summernote-bs4.min.js' %}"></script>
+<!-- overlayScrollbars -->
+{#<script src="{% static 'plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js' %}"></script>#}
+<!-- AdminLTE App -->
+<script src="{% static "plugins/datatables/jquery.dataTables.js" %}"></script>
+<script src="{% static "plugins/datatables-bs4/js/dataTables.bootstrap4.js" %}"></script>
+<script src="{% static "plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js" %}"></script>
+
+<script src="{% static "plugins/toastr/toastr.min.js" %}"></script>
+
+<script src="{% static 'dist/js/adminlte.js' %}"></script>
+<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+<script src="{% static 'dist/js/pages/dashboard.js' %}"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="{% static 'dist/js/demo.js' %}"></script>
+{% block scripts %}
+{% endblock scripts %}
 </body>
 </html>

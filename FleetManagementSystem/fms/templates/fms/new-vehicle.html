@@ -1,55 +1,62 @@
 {% extends 'fms/base.html' %}
-
+{% block page_title %}
+    FMS | New Vehicle
+{% endblock page_title %}
+{% block title %}
+    New Vehicle
+{% endblock title %}
+{% block title-right %}
+    <ol class="breadcrumb float-sm-right">
+        <button type="button" onclick="location.href='{% url 'vehicles' %}'" class="btn btn-block btn-primary"><span class="fas fa-list"></span> Vehicles</button>
+    </ol>
+{% endblock title-right %}
 {% block content %}
-    <div class="app-page-title">
-        <div class="page-title-wrapper">
-            <div class="page-title-heading">
-                <div class="page-title-icon">
-                    <i class="pe-7s-car icon-gradient bg-mean-fruit">
-                    </i>
-                </div>
-                <div>New Vehicle
-                </div>
+    <div class="row">
+        <!-- left column -->
+        <div class="col-md-3"></div>
+        <div class="col-md-6">
+            <!-- general form elements -->
+            <div class="card card-primary">
+                <!-- /.card-header -->
+                <!-- form start -->
+                <form role="form" method="post" action="{% url 'new-vehicle' %}">
+                {% csrf_token %}
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Make</label>
+                            <input type="text" name="make" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputPassword1">Model</label>
+                            <input type="text" name="model" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputPassword1">Year</label>
+                            <input type="text" name="year" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputPassword1">License Plate</label>
+                            <input type="text" name="license_plate" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                        <label>Role</label>
+                        <select class="form-control" name="role" required>
+                            {% for role in roles %}
+                              <option value="{{ role.id }}">{{ role.name }}</option>
+                            {% endfor roles %}
+                        </select>
+                      </div>
+                    </div>
+                    <!-- /.card-body -->
+
+                    <div class="card-footer">
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+                </form>
             </div>
+
         </div>
-    </div>
-    <div class="tab-content">
-        <div class="tab-pane tabs-animation fade active show" id="tab-content-1" role="tabpanel">
-            <div class="main-card mb-3 card">
-                <div class="card-body">
-                    <form class="{% url 'new-vehicle' %}" method="post">
-                        {% csrf_token %}
-                        <div class="position-relative row form-group"><label for="make" class="col-sm-2 col-form-label">Make</label>
-                            <div class="col-sm-10"><input name="make" id="make" type="text" class="form-control"></div>
-                        </div>
-                        <div class="position-relative row form-group"><label for="model"
-                                                                             class="col-sm-2 col-form-label">Model</label>
-                            <div class="col-sm-10"><input name="model" id="model" type="text" class="form-control">
-                            </div>
-                        </div>
-                        <div class="position-relative row form-group"><label for="license_plate"
-                                                                             class="col-sm-2 col-form-label">License
-                            Plate</label>
-                            <div class="col-sm-10"><input name="license_plate" id="license_plate" type="text"
-                                                          class="form-control"></div>
-                        </div>
-                        <div class="position-relative row form-group"><label for="role" class="col-sm-2 col-form-label">Role</label>
-                            <div class="col-sm-10">
-                                <select name="role" id="role" class="form-control">
-                                    {% for role in roles %}
-                                        <option value="{{ role.id }}">{{ role.name }}</option>
-                                    {% endfor roles %}
-                                </select>
-                            </div>
-                        </div>
-                        <div class="position-relative row form-check">
-                            <div class="col-sm-10 offset-sm-11">
-                                <button type="submit" class="btn btn-primary">Submit</button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
+        <div class="col-md-3"></div>
     </div>
 {% endblock content %}
+

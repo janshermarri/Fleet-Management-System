@@ -1,61 +1,137 @@
 {% extends 'fms/base.html' %}
-
+{% block page_title %}
+    FMS | Schedule
+{% endblock page_title %}
+{% block title %}
+    Schedule
+{% endblock title %}
+{% block title-right %}
+    <ol class="breadcrumb float-sm-right">
+        <button type="button" onclick="location.href='{% url 'new-schedule' %}'" class="btn btn-block btn-primary"><span class="fas fa-plus"></span> New Schedule</button>
+    </ol>
+{% endblock title-right %}
 {% block content %}
-    <div class="app-page-title">
-        <div class="page-title-wrapper">
-            <div class="page-title-heading">
-                <div class="page-title-icon">
-                    <i class="pe-7s-car icon-gradient bg-mean-fruit">
-                    </i>
-                </div>
-                <div>Schedule
-                </div>
-            </div>
-            <div class="page-title-actions">
-                <button type="button" onclick="location.href='{% url 'new-schedule' %}'" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
-                        class="btn-shadow btn btn-info">
-                                            <span class="btn-icon-wrapper pr-2 opacity-7">
-                                                <i class="fa fa-business-time fa-w-20"></i>
-                                            </span>
-                    New Schedule
-                </button>
-            </div>
+        <div class="row">
+          <div class="col-md-3 col-sm-6 col-12">
+            <div class="info-box">
+              <span class="info-box-icon bg-warning"><i class="far fa-hourglass"></i></span>
 
+              <div class="info-box-content">
+                <span class="info-box-text">Unassigned</span>
+                <span class="info-box-number">{{ count.unassigned }}</span>
+              </div>
+              <!-- /.info-box-content -->
+            </div>
+            <!-- /.info-box -->
+          </div>
+          <!-- /.col -->
+          <div class="col-md-3 col-sm-6 col-12">
+            <div class="info-box">
+              <span class="info-box-icon bg-success"><i class="far fa-flag"></i></span>
+
+              <div class="info-box-content">
+                <span class="info-box-text">Completed</span>
+                <span class="info-box-number">{{ count.completed }}</span>
+              </div>
+              <!-- /.info-box-content -->
+            </div>
+            <!-- /.info-box -->
+          </div>
+          <!-- /.col -->
+          <div class="col-md-3 col-sm-6 col-12">
+            <div class="info-box">
+              <span class="info-box-icon bg-danger"><i class="fa fa-exclamation"></i></span>
+
+              <div class="info-box-content">
+                <span class="info-box-text">Cancelled</span>
+                <span class="info-box-number">{{ count.cancelled }}</span>
+              </div>
+              <!-- /.info-box-content -->
+            </div>
+            <!-- /.info-box -->
+          </div>
+          <!-- /.col -->
+          <div class="col-md-3 col-sm-6 col-12">
+            <div class="info-box">
+              <span class="info-box-icon bg-primary"><i class="far fa-star"></i></span>
+
+              <div class="info-box-content">
+                <span class="info-box-text">En-route</span>
+                <span class="info-box-number">{{ count.en_route }}</span>
+              </div>
+              <!-- /.info-box-content -->
+            </div>
+            <!-- /.info-box -->
+          </div>
+          <!-- /.col -->
         </div>
-    </div>
+
     <div class="row">
-        <div class="col-lg-12">
-            <div class="main-card mb-3 card">
+        <div class="col-12">
+            <!-- /.card -->
+
+            <div class="card">
                 <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="mb-0 table">
-                            <thead>
-                            <tr>
-                                <th>Vehicle</th>
-                                <th>Booking</th>
-                                <th>Departure</th>
-                                <th>Arrival</th>
-                                <th>Purpose</th>
-                                <th>Actions</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {% for item in schedule %}
-                                <tr>
-                                    <td>{{ item.vehicle.make }} - {{ item.vehicle.model }}</td>
-                                    <td>{{ item.booking.description }}</td>
-                                    <td>{{ item.departure_date }}</td>
-                                    <td>{{ item.arrival_date }}</td>
-                                    <td>{{ item.booking.purpose.name }}</td>
-                                    <td></td>
-                                </tr>
-                            {% endfor bookings %}
-                            </tbody>
-                        </table>
+                    <div id="example1_wrapper" class="dataTables_wrapper dt-bootstrap4">
+                        <div class="row">
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <table id="schedule-table" class="table table-bordered table-striped dataTable"
+                                       role="grid"
+                                       aria-describedby="example1_info">
+                                    <thead>
+                                    <tr role="row">
+                                        <th class="sorting_asc" tabindex="0" aria-controls="example1" rowspan="1"
+                                            colspan="1" aria-sort="ascending">Vehicle
+                                        </th>
+                                        <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1"
+                                            colspan="1">Booking
+                                        </th>
+                                        <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1"
+                                            colspan="1">Departure
+                                        </th>
+                                        <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1"
+                                            colspan="1">Arrival
+                                        </th>
+                                        <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1"
+                                            colspan="1">Purpose
+                                        </th>
+                                        <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1"
+                                            colspan="1">Actions
+                                        </th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for item in schedule %}
+                                        <tr role="row">
+                                            <td class="sorting_1">{{ item.vehicle.make }} - {{ item.vehicle.model }}</td>
+                                            <td>{{ item.booking.description }}</td>
+                                            <td>{{ item.departure_date }}</td>
+                                            <td>{{ item.arrival_date }}</td>
+                                            <td>{{ item.booking.purpose.name }}</td>
+                                            <td></td>
+                                        </tr>
+
+                                    {% endfor schedule %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
                 </div>
+                <!-- /.card-body -->
             </div>
+            <!-- /.card -->
         </div>
+        <!-- /.col -->
     </div>
-
 {% endblock content %}
+{% block scripts %}
+    <script>
+        $(document).ready(function () {
+            $("#schedule-table").DataTable();
+        });
+    </script>
+{% endblock scripts %}
+

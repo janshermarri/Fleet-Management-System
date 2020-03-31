@@ -33,13 +33,12 @@ class Vehicle(models.Model):
 class Booking(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     purpose = models.ForeignKey(Role, on_delete=models.CASCADE)
-    items = models.CharField(max_length=50)
-    status = models.ForeignKey(Status, on_delete=models.CASCADE)
+    status = models.ForeignKey(Status, on_delete=models.CASCADE, default=1, null=True)
     description = models.TextField(null=True, default=None)
     departure_date = models.DateTimeField()
     from_location = models.TextField(max_length=255)
     to_location = models.TextField(max_length=255)
-    date_created = models.DateTimeField(auto_created=True)
+    date_created = models.DateTimeField(auto_now_add=True)
     date_updated = models.DateTimeField(auto_now=True)
 
 

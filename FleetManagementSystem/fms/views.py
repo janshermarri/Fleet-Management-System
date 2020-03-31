@@ -2,14 +2,26 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, logout, login
 from django.contrib.auth.models import User
 from .models import Vehicle, Booking, Schedule, Status, Role
+from django.db.models import Q
+from django.views.decorators.csrf import csrf_exempt
+from django.http import JsonResponse
+
+BOOKING_STATUS = {
+    'BOOKED': 1,
+    'DEPARTED': 2,
+    'COMPLETED': 4,
+    'CANCELLED': 5,
+    'ASSIGNED': 6,
+}
 
 
 def index(request):
     if request.user.is_authenticated:
-        bookings_count = Booking.objects.count()
-        vehicles_count = Vehicle.objects.count()
-        vendors_count = 2
-        count = {'bookings': bookings_count, 'vehicles': vehicles_count, 'vendors': vendors_count}
+        bookings = Booking.objects.count()
+        vehicles = Vehicle.objects.count()
+        vendors = 2
+        en_route_vehicles = Booking.objects.filter(status_id=BOOKING_STATUS['DEPARTED']).count()
+        count = {'bookings': bookings, 'vehicles': vehicles, 'en_route_vehicles': en_route_vehicles, 'vendors': vendors}
         return render(request, 'fms/index.html', {'count': count})
     else:
         return redirect('/login')
@@ -83,7 +95,6 @@ def new_vehicle_view(request):
                 return redirect('/vehicles')
             except Exception as e:
                 return render(request, 'fms/new-booking.html', {'error_message': e})
-
         else:
             roles = Role.objects.all()
             return render(request, 'fms/new-vehicle.html', {'roles': roles})
@@ -93,15 +104,41 @@ def new_vehicle_view(request):
 
 def bookings_view(request):
     if request.user.is_authenticated:
+        unassigned = Booking.objects.filter(status_id=BOOKING_STATUS['BOOKED']).count()
+        completed = Booking.objects.filter(status_id=BOOKING_STATUS['COMPLETED']).count()
+        cancelled = Booking.objects.filter(status_id=BOOKING_STATUS['CANCELLED']).count()
+        en_route = Booking.objects.filter(status_id=BOOKING_STATUS['DEPARTED']).count()
+        count = {'unassigned': unassigned, 'completed': completed,
+                 'cancelled': cancelled, 'en_route_vehicles':  en_route}
+
         bookings = Booking.objects.all()
-        return render(request, 'fms/bookings.html', {'bookings': bookings})
+        return render(request, 'fms/bookings.html', {'bookings': bookings, 'count': count})
     else:
         return redirect('/login')
 
 
 def new_booking_view(request):
     if request.user.is_authenticated:
-        return render(request, 'fms/new-booking.html')
+        if request.method == 'POST':
+            from_location = request.POST['from_location']
+            to_location = request.POST['to_location']
+            departure_date = request.POST['departure_date']
+            purpose = request.POST['purpose']
+            description = request.POST['description']
+            user_id = request.user.id
+
+            booking = Booking.objects.create(from_location=from_location, to_location=to_location,
+                                             description=description, departure_date=departure_date,
+                                             purpose_id=purpose, user_id=user_id)
+            try:
+                booking.save()
+                return redirect('/bookings')
+            except Exception as e:
+                return render(request, 'fms/new-booking.html', {'error_message': e})
+
+        else:
+            purposes = Role.objects.all()
+            return render(request, 'fms/new-booking.html', {'purposes': purposes})
     else:
         return redirect('/login')
 
@@ -116,7 +153,43 @@ def schedule_view(request):
 
 def new_schedule_view(request):
     if request.user.is_authenticated:
-        return render(request, 'fms/new-schedule.html')
+        vehicles = Vehicle.objects.all()
+        bookings = Booking.objects.filter(status_id=BOOKING_STATUS['BOOKED']).all()
+        if request.method == 'POST':
+            departure_arrival_range = request.POST['departure_arrival_range']
+            departure_arrival_range = departure_arrival_range.split(" - ")
+            departure_date = departure_arrival_range[0]
+            arrival_date = departure_arrival_range[1]
+            booking_id = request.POST['booking_id']
+            vehicle_id = request.POST['vehicle_id']
+            existing_vehicle_schedule_count = Schedule.objects.filter(Q(vehicle_id=vehicle_id),
+                                                                      Q(departure_date__range=(departure_date,
+                                                                                               arrival_date)) |
+                                                                      Q(arrival_date__range=(departure_date,
+                                                                                             arrival_date))
+                                                                      ).count()
+            if existing_vehicle_schedule_count > 0:
+                return render(request, 'fms/new-schedule.html', {
+                    'vehicles': vehicles,
+                    'bookings': bookings,
+                    'error_message': 'Schedule already exists against given vehicle in the provided time frame. '
+                                     'Please adjust your departure and arrival date.'})
+            try:
+                schedule = Schedule.objects.create(departure_date=departure_date, arrival_date=arrival_date,
+                                                   booking_id=booking_id, vehicle_id=vehicle_id)
+                schedule.save()
+                booking = Booking.objects.get(id=booking_id)
+                booking.status_id = BOOKING_STATUS['ASSIGNED']
+                booking.save()
+                return redirect('/schedule')
+            except Exception as e:
+                return render(request, 'fms/new-schedule.html', {
+                    'vehicles': vehicles,
+                    'bookings': bookings,
+                    'error_message': 'Unable to create a new schedule. Please try again later.'})
+
+        else:
+            return render(request, 'fms/new-schedule.html', {'vehicles': vehicles, 'bookings': bookings})
     else:
         return redirect('/login')
 
@@ -133,3 +206,17 @@ def new_vendor_view(request):
         return render(request, 'fms/new-vendor.html')
     else:
         return redirect('/login')
+
+
+@csrf_exempt
+def set_booking_status(request):
+    try:
+        booking = Booking.objects.get(id=int(request.POST['booking_id']))
+        booking.status_id = int(request.POST['status_id'])
+        booking.save()
+        return JsonResponse({'response': 1, 'status': 0})
+    except Exception as e:
+        return JsonResponse({'response': 1, 'status': -1})
+
+
+

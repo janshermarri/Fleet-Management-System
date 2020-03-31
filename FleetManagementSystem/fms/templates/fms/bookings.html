@@ -1,63 +1,189 @@
 {% extends 'fms/base.html' %}
-
+{% block page_title %}
+    FMS | Bookings
+{% endblock page_title %}
+{% block title %}
+    Bookings
+{% endblock title %}
+{% block title-right %}
+    <ol class="breadcrumb float-sm-right">
+        <button type="button" onclick="location.href='{% url 'new-booking' %}'" class="btn btn-block btn-primary"><span
+                class="fas fa-plus"></span> New Booking
+        </button>
+    </ol>
+{% endblock title-right %}
 {% block content %}
-    <div class="app-page-title">
-        <div class="page-title-wrapper">
-            <div class="page-title-heading">
-                <div class="page-title-icon">
-                    <i class="pe-7s-car icon-gradient bg-mean-fruit">
-                    </i>
-                </div>
-                <div>Bookings
-                </div>
-            </div>
-            <div class="page-title-actions">
-                <button type="button" onclick="location.href='{% url 'new-booking' %}'" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
-                        class="btn-shadow btn btn-info">
-                                            <span class="btn-icon-wrapper pr-2 opacity-7">
-                                                <i class="fa fa-business-time fa-w-20"></i>
-                                            </span>
-                    New Booking
-                </button>
-            </div>
+    <div class="row">
+        <div class="col-md-3 col-sm-6 col-12">
+            <div class="info-box">
+                <span class="info-box-icon bg-warning"><i class="far fa-hourglass"></i></span>
 
+                <div class="info-box-content">
+                    <span class="info-box-text">Unassigned</span>
+                    <span class="info-box-number">{{ count.unassigned }}</span>
+                </div>
+                <!-- /.info-box-content -->
+            </div>
+            <!-- /.info-box -->
         </div>
+        <!-- /.col -->
+        <div class="col-md-3 col-sm-6 col-12">
+            <div class="info-box">
+                <span class="info-box-icon bg-success"><i class="far fa-flag"></i></span>
+
+                <div class="info-box-content">
+                    <span class="info-box-text">Completed</span>
+                    <span class="info-box-number">{{ count.completed }}</span>
+                </div>
+                <!-- /.info-box-content -->
+            </div>
+            <!-- /.info-box -->
+        </div>
+        <!-- /.col -->
+        <div class="col-md-3 col-sm-6 col-12">
+            <div class="info-box">
+                <span class="info-box-icon bg-danger"><i class="fa fa-exclamation"></i></span>
+
+                <div class="info-box-content">
+                    <span class="info-box-text">Cancelled</span>
+                    <span class="info-box-number">{{ count.cancelled }}</span>
+                </div>
+                <!-- /.info-box-content -->
+            </div>
+            <!-- /.info-box -->
+        </div>
+        <!-- /.col -->
+        <div class="col-md-3 col-sm-6 col-12">
+            <div class="info-box">
+                <span class="info-box-icon bg-primary"><i class="far fa-star"></i></span>
+
+                <div class="info-box-content">
+                    <span class="info-box-text">En-route</span>
+                    <span class="info-box-number">{{ count.en_route_vehicles }}</span>
+                </div>
+                <!-- /.info-box-content -->
+            </div>
+            <!-- /.info-box -->
+        </div>
+        <!-- /.col -->
     </div>
     <div class="row">
-        <div class="col-lg-12">
-            <div class="main-card mb-3 card">
+        <div class="col-12">
+            <!-- /.card -->
+
+            <div class="card">
                 <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="mb-0 table">
-                            <thead>
-                            <tr>
-                                <th>From</th>
-                                <th>To</th>
-                                <th>Departure</th>
-                                <th>Purpose</th>
-                                <th>Status</th>
-                                <th>Description</th>
-                                <th>Actions</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {% for booking in bookings %}
-                                <tr>
-                                    <td>{{ booking.from_location }}</td>
-                                    <td>{{ booking.to_location }}</td>
-                                    <td>{{ booking.departure_date }}</td>
-                                    <td>{{ booking.purpose.name }}</td>
-                                    <td>{{ booking.status.name }}</td>
-                                    <td>{{ booking.description }}</td>
-                                    <td></td>
-                                </tr>
-                            {% endfor bookings %}
-                            </tbody>
-                        </table>
+                    <div id="example1_wrapper" class="dataTables_wrapper dt-bootstrap4">
+                        <div class="row">
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <table id="bookings-table" class="table table-bordered table-striped dataTable"
+                                       role="grid"
+                                       aria-describedby="example1_info">
+                                    <thead>
+                                    <tr role="row">
+                                        <th class="sorting_asc" tabindex="0" aria-controls="example1" rowspan="1"
+                                            colspan="1" aria-sort="ascending">Description
+                                        </th>
+                                        <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1"
+                                            colspan="1">From
+                                        </th>
+                                        <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1"
+                                            colspan="1">To
+                                        </th>
+                                        <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1"
+                                            colspan="1">Departure
+                                        </th>
+                                        <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1"
+                                            colspan="1">Purpose
+                                        </th>
+                                        <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1"
+                                            colspan="1">Status
+                                        </th>
+                                        <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1"
+                                            colspan="1">Actions
+                                        </th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for booking in bookings %}
+                                        <tr role="row">
+                                            <td class="sorting_1">{{ booking.description }}</td>
+                                            <td>{{ booking.from_location }}</td>
+                                            <td>{{ booking.to_location }}</td>
+                                            <td>{{ booking.departure_date }}</td>
+                                            <td>{{ booking.purpose.name }}</td>
+                                            <td>{% if booking.status.name == 'Booked' %}
+                                                <span class="badge badge-secondary">{{ booking.status.name }}</span>
+                                            {% elif booking.status.name == 'Assigned' %}
+                                                <span class="badge badge-primary">{{ booking.status.name }}</span>
+                                            {% elif booking.status.name == 'Departed' %}
+                                                <span class="badge badge-info">{{ booking.status.name }}</span>
+                                            {% elif booking.status.name == 'Completed' %}
+                                                <span class="badge badge-success">{{ booking.status.name }}</span>
+                                            {% elif booking.status.name == 'Cancelled' %}
+                                                <span class="badge badge-danger">{{ booking.status.name }}</span>
+                                            {% else %}
+                                                <span class="badge badge-info">{{ booking.status.name }}</span>
+                                            {% endif %}
+                                            </td>
+                                            <td>{% if booking.status.name == 'Assigned' and booking.status.name != 'Completed' and booking.status.name != 'Cancelled' %}
+                                                <button class="btn btn-primary btn-sm" onclick="setBookingStatus({{ booking.id }}, 2)">
+                                                    <i class="fa fa-car">
+                                                    </i>
+                                                    Depart
+                                                </button>
+                                                {% endif %}
+                                                {% if booking.status.name == 'Departed' and booking.status.name != 'Completed' and booking.status.name != 'Cancelled' %}
+                                                <button class="btn btn-success btn-sm" onclick="setBookingStatus({{ booking.id }}, 4)">
+                                                    <i class="fas fa-check">
+                                                    </i>
+                                                    Complete
+                                                </button>
+                                                {% endif %}
+                                                {% if booking.status.name != 'Completed' and booking.status.name != 'Cancelled' %}
+                                                <button class="btn btn-danger btn-sm" onclick="setBookingStatus({{ booking.id }}, 5)">
+                                                    <i class="fas fa-ban">
+                                                    </i>
+                                                    Cancel
+                                                </button>
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+
+                                    {% endfor bookings %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
                 </div>
+                <!-- /.card-body -->
             </div>
+            <!-- /.card -->
         </div>
+        <!-- /.col -->
     </div>
-
 {% endblock content %}
+{% block scripts %}
+    <script>
+        $(document).ready(function () {
+            $("#bookings-table").DataTable();
+
+        });
+        function setBookingStatus(booking_id, status_id) {
+            $.post("set-status", {
+                'booking_id': booking_id,
+                'status_id': status_id,
+            }, function (data, status) {
+                if(data.status === 0)
+                    toastr.success('Status updated successfully. Please refresh the page to see latest data.');
+                else
+                    toastr.error('Unable to update status. Please try again later.');
+            });
+
+        }
+    </script>
+{% endblock scripts %}
+
